@@ -1,21 +1,20 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { MongoClient } from "mongodb";
-
-if (!process.env.MONGODB_URI) {
-  throw new Error("MONGODB_URI is not defined in environment variables");
-}
 
 let cachedClient: MongoClient | null = null;
 
 async function connectToMongo() {
   if (cachedClient) return cachedClient;
-  const client = new MongoClient(process.env.MONGODB_URI!);
+  if (!process.env.MONGODB_URI) {
+    throw new Error("MONGODB_URI is not defined");
+  }
+  const client = new MongoClient(process.env.MONGODB_URI);
   await client.connect();
   cachedClient = client;
   return client;
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => null);
     if (!body) {
