@@ -5,6 +5,8 @@ const MONGODB_URI = process.env.MONGODB_URI as string;
 if (!MONGODB_URI) throw new Error("Please add MONGODB_URI to .env.local");
 
 let isConnected = false;
+console.log("MONGODB_URI =", process.env.MONGODB_URI);
+
 
 export const connectToDatabase = async () => {
   if (isConnected) return;
